@@ -6,7 +6,7 @@ import secrets
 from collections.abc import Callable
 from http import HTTPStatus
 
-from fastapi import FastAPI, HTTPException, Request
+from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.responses import Response
@@ -37,11 +37,25 @@ class CSRFMiddleware(BaseHTTPMiddleware):
     EXEMPT_PATHS = {
         "/register",
         "/login",
+        "/refresh",
         "/openapi.json",
         "/docs",
         "/docs/oauth2-redirect",
         "/redoc",
     }
+
+    def _set_csrf_cookie(self, response: Response, csrf_token: str) -> None:
+        settings = get_settings()
+        signed_token = self._sign_token(csrf_token, settings.jwt_secret_key)
+        response.set_cookie(
+            key="csrf_token",
+            value=signed_token,
+            httponly=True,
+            secure=True,
+            samesite="strict",
+            max_age=3600,
+            path="/",
+        )
 
     @staticmethod
     def _sign_token(raw_token: str, secret_key: str) -> str:
@@ -81,22 +95,15 @@ class CSRFMiddleware(BaseHTTPMiddleware):
         if state_changing_request and request.url.path not in self.EXEMPT_PATHS:
             header_token = request.headers.get("X-CSRF-Token")
             if not header_token or header_token != csrf_token:
-                raise HTTPException(
+                response = JSONResponse(
                     status_code=HTTPStatus.FORBIDDEN,
-                    detail="CSRF validation failed",
+                    content={"detail": "CSRF validation failed"},
                 )
+                self._set_csrf_cookie(response=response, csrf_token=csrf_token)
+                return response
 
         response = await call_next(request)
-        signed_token = self._sign_token(csrf_token, settings.jwt_secret_key)
-        response.set_cookie(
-            key=cookie_name,
-            value=signed_token,
-            httponly=True,
-            secure=True,
-            samesite="strict",
-            max_age=3600,
-            path="/",
-        )
+        self._set_csrf_cookie(response=response, csrf_token=csrf_token)
         return response
 
 
