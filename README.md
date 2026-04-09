@@ -4,7 +4,7 @@ A production-oriented, security-hardened REST API built with FastAPI, JWT authen
 
 ## Team
 
-Team Name: `Sprint-TeamName` (replace with your actual team name)
+Team Name: restapisecurity
 
 ## Project Overview
 
