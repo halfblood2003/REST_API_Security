@@ -1,3 +1,8 @@
+BY:
+PIRZADA AFAQ AHMAD [FA22-BCT-028]
+ABDUL MOIZ         [FA22-BCT-003]
+SYED SOHAIL ABBAS  [FA22-BCT-032]
+
 # REST_API_Security
 
 A production-oriented, security-hardened REST API built with FastAPI, JWT authentication, SQLAlchemy ORM, and CI/CD security controls for a university DevSecOps lab exam.
