@@ -57,7 +57,7 @@ def _register_and_login(client: TestClient, username: str, email: str) -> str:
 
     login_response = client.post(
         "/login",
-        json={"username": username, "password": "VeryStrongPass123!"},
+        data={"username": username, "password": "VeryStrongPass123!"},
     )
     assert login_response.status_code == 200
     return login_response.json()["access_token"]

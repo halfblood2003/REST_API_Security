@@ -2,6 +2,7 @@ from datetime import timedelta
 from http import HTTPStatus
 
 from fastapi import APIRouter, Depends, HTTPException, Request, Response
+from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 
 from app.auth.dependencies import get_current_user
@@ -10,13 +11,7 @@ from app.auth.password import hash_password, verify_password
 from app.config import get_settings
 from app.database import get_db
 from app.models import User
-from app.schemas import (
-    CSRFTokenResponse,
-    LoginRequest,
-    TokenResponse,
-    UserCreate,
-    UserRead,
-)
+from app.schemas import CSRFTokenResponse, TokenResponse, UserCreate, UserRead
 
 router = APIRouter(tags=["auth"])
 
@@ -47,14 +42,14 @@ def register_user(payload: UserCreate, db: Session = Depends(get_db)) -> User:
 
 @router.post("/login", response_model=TokenResponse)
 def login_user(
-    payload: LoginRequest,
     response: Response,
+    form_data: OAuth2PasswordRequestForm = Depends(),
     db: Session = Depends(get_db),
 ) -> TokenResponse:
     settings = get_settings()
-    user = db.query(User).filter(User.username == payload.username).first()
+    user = db.query(User).filter(User.username == form_data.username).first()
 
-    if user is None or not verify_password(payload.password, user.password_hash):
+    if user is None or not verify_password(form_data.password, user.password_hash):
         raise HTTPException(
             status_code=HTTPStatus.UNAUTHORIZED,
             detail="Invalid credentials",

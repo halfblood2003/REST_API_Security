@@ -63,7 +63,7 @@ def test_login_with_wrong_password_returns_401(client: TestClient) -> None:
 
     response = client.post(
         "/login",
-        json={"username": "wrong-pass", "password": "invalid-password"},
+        data={"username": "wrong-pass", "password": "invalid-password"},
     )
 
     assert response.status_code == 401

@@ -57,7 +57,7 @@ def _register_and_login(client: TestClient) -> str:
 
     login_response = client.post(
         "/login",
-        json={"username": payload["username"], "password": payload["password"]},
+        data={"username": payload["username"], "password": payload["password"]},
     )
     assert login_response.status_code == 200
     return login_response.json()["access_token"]
