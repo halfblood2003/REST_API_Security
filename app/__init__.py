@@ -1,0 +1,1 @@
+"""Secure FastAPI application package."""
