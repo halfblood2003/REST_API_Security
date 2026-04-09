@@ -1,4 +1,4 @@
-# Secure FastAPI JWT Auth REST API
+# REST_API_Security
 
 A production-oriented, security-hardened REST API built with FastAPI, JWT authentication, SQLAlchemy ORM, and CI/CD security controls for a university DevSecOps lab exam.
 
@@ -47,8 +47,8 @@ Security Layers:
 ## Setup & Run
 
 # 1. Clone the repo
-git clone https://github.com/YOUR_USERNAME/SecureApp-Sprint-TeamName.git
-cd SecureApp-Sprint-TeamName
+git clone https://github.com/YOUR_USERNAME/REST_API_Security.git
+cd REST_API_Security
 
 # 2. Create virtual environment
 python -m venv venv

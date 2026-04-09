@@ -10,7 +10,13 @@ from app.auth.password import hash_password, verify_password
 from app.config import get_settings
 from app.database import get_db
 from app.models import User
-from app.schemas import CSRFTokenResponse, LoginRequest, TokenResponse, UserCreate, UserRead
+from app.schemas import (
+    CSRFTokenResponse,
+    LoginRequest,
+    TokenResponse,
+    UserCreate,
+    UserRead,
+)
 
 router = APIRouter(tags=["auth"])
 

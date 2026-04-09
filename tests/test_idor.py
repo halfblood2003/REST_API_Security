@@ -71,7 +71,9 @@ def _csrf_headers(client: TestClient, access_token: str) -> dict[str, str]:
     assert response.status_code == 200
 
     csrf_token = response.json()["csrf_token"]
-    csrf_cookie = _cookie_from_set_cookie(response.headers.get("set-cookie", ""), "csrf_token")
+    csrf_cookie = _cookie_from_set_cookie(
+        response.headers.get("set-cookie", ""), "csrf_token"
+    )
 
     return {
         "Authorization": f"Bearer {access_token}",

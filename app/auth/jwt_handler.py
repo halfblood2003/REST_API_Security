@@ -17,7 +17,9 @@ def _build_token(subject: str, token_type: str, expires_delta: timedelta) -> str
         "iat": now,
         "exp": now + expires_delta,
     }
-    return jwt.encode(payload, settings.jwt_secret_key, algorithm=settings.jwt_algorithm)
+    return jwt.encode(
+        payload, settings.jwt_secret_key, algorithm=settings.jwt_algorithm
+    )
 
 
 def create_access_token(subject: str, expires_delta: timedelta | None = None) -> str:
